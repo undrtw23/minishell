@@ -1,0 +1,25 @@
+HEREDOC DELIM PARSING
+	when there's no space between delim and the next operator,
+	do not integrate operator between single quotes!
+
+
+/* Handles modifications to the input string before parsing.
+Processes heredoc delimiters and expands ${VAR} and $VAR.
+Updates the input string in-place with all applied changes. */
+void	handle_input(char **input, int quotes[2], t_cmd_set *p)
+{
+	int		i[3];
+	char	*tmp[3];
+
+	i[0] = -1;
+	//TODO REDO PROCESS HEREDOC 
+	if (ft_strnstr(*input, "<<", ft_strlen(*input)))
+		process_heredoc(input, i, quotes, tmp);
+	if (ft_strnstr(*input, "${", ft_strlen(*input)))
+		remove_curly_brackets(input, i, quotes, tmp);
+	*input = var_expander(*input, quotes, p);
+}
+
+
+
+valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --track-fds=yes --track-fds=yes --trace-children=yes

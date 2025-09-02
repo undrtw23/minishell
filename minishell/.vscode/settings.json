@@ -1,0 +1,8 @@
+{
+	"files.associations": {
+		"minishell.h": "c",
+		"ft_printf_fd.h": "c",
+		"libft.h": "c",
+		"cmath": "c"
+	}
+}
