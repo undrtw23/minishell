@@ -6,7 +6,7 @@
 /*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:39:27 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/09/02 18:29:54 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/02 22:16:21 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -372,44 +372,42 @@ int	read_heredocs(t_cmd_set *p, int *line_index, int syntax)
 	// int		expand;
 	// expand = 1;
 	i = -1;
-	
 	while (p->tokens[++i] && i < syntax)
 	{
-		// ft_printf_fd(2, "readheredocs token=%s syntax=%i\n", p->tokens[i], syntax);
+		// ft_printf_fd(2, "readheredocs token=%s syntax=%i\n", p->tokens[i],
+		// syntax);
 		if (get_nodetype(p->tokens[i]) == N_HEREDOC)
 		{
-			printf("UHHHH P TOKEN: %s\n", p->tokens[i]);
 			if (get_nodetype(p->tokens[i + 1]) == N_CMD)
 			{
-				printf("UHHHH P TOKEN next: %s\n", p->tokens[i + 1]);
 				// expand = check_delim_expand(p->tokens[i + 1]);
 				str[0] = NULL;
 				str[1] = NULL;
 				str[2] = NULL;
 				p->heredoc[i] = read_heredoc_b(str, p->tokens[i + 1], p,
 						line_index);
-				ft_printf_fd(2, "readheredocs fdheredoc[%i]=%i\n", i, p->heredoc[i]);
 				if (p->heredoc[i] == -1)
 				{
 					if (g_exit_status == 130)
-					{
-						ft_printf_fd(2, "readheredocs 130\n");
 						return (p->status_code = 130, 130);
-					}
-						put_err("NoFile_NoDir", NULL, 1, p);
+					put_err("NoFile_NoDir", NULL, 1, p);
 					break ;
 				}
 			}
 			else
 			{
-				// ft_printf_fd(2, "wtf\n");
-				return(syntax);
+				if (g_exit_status == 0)
+					g_exit_status = p->status_code;
+				return (syntax);
 			}
 		}
 	}
 	if (g_exit_status == 0)
 		g_exit_status = p->status_code;
-	return (999);
+	// ft_printf_fd(2, "readheredocs end syntax=%i pstatus=%i gexit=%i\n",
+	//	syntax,
+	// 	p->status_code, g_exit_status);
+	return (syntax);
 }
 
 int	check_syntax(char **tokens, int token_counter, t_cmd_set *p)
@@ -480,8 +478,9 @@ void	*process_input(char **input, t_cmd_set *p)
 	// ft_printf_fd(2, "PRE procinputwhile psttscode %i\n", p->status_code);
 	while (line_index < len_input_arr)
 	{
-		// ft_printf_fd(2, "processinput leninarr=%i lineidx=%i pstatus=%i\n",
-		//	len_input_arr, line_index, p->status_code);
+		// ft_printf_fd(2,
+		// 	"processinput BEGIN leninarr=%i lineidx=%i pstatus=%i\n",
+		// 	len_input_arr, line_index, p->status_code);
 		syntax = 999;
 		p->token_count = 0;
 		p->abort = 0;
@@ -495,12 +494,13 @@ void	*process_input(char **input, t_cmd_set *p)
 		}
 		handle_input(&input[line_index], p);
 		// ft_printf_fd(2, "input=%s\n", input[line_index]);
-		p->tokens = split_by_op_ign_space_in_quote(input[line_index], "<|>&()",
-				p);
+		p->tokens = split_by_op_ign_space_in_quote(input[line_index], "<|>&()", p);
 		if (!p->tokens)
 			break ;
 		// ft_printf_fd(1, "tokens before modifs\n");
 		// print_tab(p->tokens);
+		if (p->tokens && *p->tokens[0])
+			syntax = check_syntax(p->tokens, p->token_count, p);
 		// ft_printf_fd(1, "post SPLIT BY OP p->token_count=%i\n",
 		//	p->token_count);
 		// print_tab(p->tokens);
@@ -515,22 +515,22 @@ void	*process_input(char **input, t_cmd_set *p)
 		// ft_printf_fd(2, "AFTER REALLOCTAB BEFORE READ HEREDOCS\n");
 		// print_tab(p->tokens);
 		p->token_count = ft_arr_len(p->tokens);
-		if (p->tokens && *p->tokens[0])
-			syntax = check_syntax(p->tokens, p->token_count, p);
-		// ft_printf_fd(2, "syntax=%i\n", syntax);
+		// ft_printf_fd(2, "processinput syntax=%i p_statuscode=%i\n", syntax,
+		// 	p->status_code);
 		line_index++;
-		if (read_heredocs(p, &line_index, syntax) != 999)
+		if (read_heredocs(p, &line_index, syntax) != syntax)
 		{
 			// ft_printf_fd(2,
 			// "postreadheredocs problem heredoc lnidx=%i len_input_arr=%i\n",
 			// line_index, len_input_arr);
 			//		print_tab(p->tokens);
-			free_array(&p->tokens);
+			if (p->tokens)
+				free_array(&p->tokens);
 		}
 		else
 		{
-			ft_printf_fd(2, "postreadheredocs syntax=%i\n", syntax);
-			print_tab(p->tokens);
+			// ft_printf_fd(2, "postreadheredocs syntax=%i\n", syntax);
+			// print_tab(p->tokens);
 			if (!p->tokens)
 				return (free_array(&p->tokens), p);
 			//		print_tab(p->tokens);
@@ -547,10 +547,10 @@ void	*process_input(char **input, t_cmd_set *p)
 			if (p->tokens)
 				free_array(&p->tokens);
 		}
-		ft_printf_fd(2, "procinputwhile psttscode %i\n", p->status_code);
+		// ft_printf_fd(2, "procinputwhile psttscode %i\n", p->status_code);
 	}
-	ft_printf_fd(2, "PRE procinputwhile psttscode=%i gexit=%i\n",
-		p->status_code, g_exit_status);
+	// ft_printf_fd(2, "PRE procinputwhile psttscode=%i gexit=%i\n",
+	// p->status_code, g_exit_status);
 	if (p->input_text)
 		free_array(&p->input_text);
 	if (p->filename)

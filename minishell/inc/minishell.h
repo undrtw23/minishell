@@ -6,7 +6,7 @@
 /*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:19:14 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/09/02 02:07:02 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/02 20:30:10 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ void							error_delim_heredoc(char *lim);
 void							signals_parent(int signal_code);
 void							signals_child(int signal_code);
 void							signals_heredoc(int signal_code);
+int								rl_heredoc_hook(void);
 void							set_signals(t_cmd_set *p);
 void							disable_ctrl_z(void);
 

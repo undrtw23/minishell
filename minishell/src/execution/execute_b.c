@@ -6,7 +6,7 @@
 /*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 20:59:14 by alsima            #+#    #+#             */
-/*   Updated: 2025/09/02 02:44:11 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/02 22:14:23 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -588,7 +588,7 @@ int	parent_is_redir(t_node *node, char c)
 	if (c == 'i')
 	{
 		if (type == N_READ || type == N_READWRITE
-		|| type == N_HEREDOC || type == N_HEREDOC)
+		|| type == N_HEREDOC || type == N_HERESTR)
 			return (1);
 		else if (type == N_WRITE || type == N_APPEND)
 			return (parent_is_redir(parent, c));
@@ -600,7 +600,7 @@ int	parent_is_redir(t_node *node, char c)
 		if (type == N_WRITE || type == N_APPEND)
 			return (1);
 		else if (type == N_READ || type == N_READWRITE
-		|| type == N_HEREDOC || type == N_HEREDOC)
+		|| type == N_HEREDOC || type == N_HERESTR)
 			return (parent_is_redir(parent, c));
 		else
 			return (0);
@@ -1035,7 +1035,7 @@ void	init_subshell(t_cmd_set *p, t_node *node)
 	while (++i < 1024) // void init_pid_arr(t_cmd_set *p)
 		p->pid_arr[i] = 0;
 	p->pid_index = 0;
-	// p->shlvl++;
+	p->shlvl++;
 }
 
 void	check_for_heredoc_close_fd(t_node *node, t_cmd_set *p)

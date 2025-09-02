@@ -6,7 +6,7 @@
 /*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:33:23 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/09/02 18:43:22 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/02 20:51:02 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ Ctrl + \ is ignored in the main processus
 Only work on blocking command : cat, sleep 100, grep....
 No negative status. if g_exit status is set,
 value cope to p->status_code and reset*/
+
 void	set_signals(t_cmd_set *p)
 {
 	signal(SIGINT, signals_parent);
@@ -61,7 +62,7 @@ void	signals_child(int signal_code)
 {
 	if (signal_code == SIGINT)
 	{
-		write(1, "haha\n", 5);
+		write(1, "\n", 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		g_exit_status = 130;
@@ -80,15 +81,26 @@ ioctl fakes a newline to readline so it returns (simulate press enter).
 Else it would block.*/
 void	signals_heredoc(int signal_code)
 {
+
 	if (signal_code == SIGINT)
 	{
-		g_exit_status = 130;
-		//ioctl(0, TIOCSTI, "\n");
-		write(STDOUT_FILENO, "haha2\n", 6);
+		g_exit_status = -130;
+		write(STDOUT_FILENO, "\n", 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();
-		rl_done = 1;
+
 	}
+}
+
+int	rl_heredoc_hook(void)
+{
+	if (g_exit_status == -130)
+	{
+		rl_done = 1;
+		g_exit_status = 130;
+		return 1;
+	}
+	return 0;
 }
 
 /* Ctrl + z can suspend the program*/
