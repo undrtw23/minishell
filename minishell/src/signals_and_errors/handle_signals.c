@@ -6,7 +6,7 @@
 /*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:33:23 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/08/18 18:02:04 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/02 18:43:22 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	signals_child(int signal_code)
 {
 	if (signal_code == SIGINT)
 	{
-		write(1, "\n", 1);
+		write(1, "haha\n", 5);
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		g_exit_status = 130;
@@ -83,9 +83,11 @@ void	signals_heredoc(int signal_code)
 	if (signal_code == SIGINT)
 	{
 		g_exit_status = 130;
-		ioctl(0, TIOCSTI, "\n");
+		//ioctl(0, TIOCSTI, "\n");
+		write(STDOUT_FILENO, "haha2\n", 6);
 		rl_replace_line("", 0);
 		rl_on_new_line();
+		rl_done = 1;
 	}
 }
 

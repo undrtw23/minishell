@@ -6,7 +6,7 @@
 /*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:39:27 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/09/02 01:40:08 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/02 18:29:54 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -372,24 +372,31 @@ int	read_heredocs(t_cmd_set *p, int *line_index, int syntax)
 	// int		expand;
 	// expand = 1;
 	i = -1;
+	
 	while (p->tokens[++i] && i < syntax)
 	{
 		// ft_printf_fd(2, "readheredocs token=%s syntax=%i\n", p->tokens[i], syntax);
 		if (get_nodetype(p->tokens[i]) == N_HEREDOC)
 		{
+			printf("UHHHH P TOKEN: %s\n", p->tokens[i]);
 			if (get_nodetype(p->tokens[i + 1]) == N_CMD)
 			{
+				printf("UHHHH P TOKEN next: %s\n", p->tokens[i + 1]);
 				// expand = check_delim_expand(p->tokens[i + 1]);
 				str[0] = NULL;
 				str[1] = NULL;
 				str[2] = NULL;
 				p->heredoc[i] = read_heredoc_b(str, p->tokens[i + 1], p,
 						line_index);
+				ft_printf_fd(2, "readheredocs fdheredoc[%i]=%i\n", i, p->heredoc[i]);
 				if (p->heredoc[i] == -1)
 				{
 					if (g_exit_status == 130)
-						return (p->status_code = 130, 1);
-					put_err("NoFile_NoDir", NULL, 1, p);
+					{
+						ft_printf_fd(2, "readheredocs 130\n");
+						return (p->status_code = 130, 130);
+					}
+						put_err("NoFile_NoDir", NULL, 1, p);
 					break ;
 				}
 			}
@@ -522,8 +529,8 @@ void	*process_input(char **input, t_cmd_set *p)
 		}
 		else
 		{
-			// ft_printf_fd(2, "postreadheredocs syntax=%i\n", syntax);
-			// print_tab(p->tokens);
+			ft_printf_fd(2, "postreadheredocs syntax=%i\n", syntax);
+			print_tab(p->tokens);
 			if (!p->tokens)
 				return (free_array(&p->tokens), p);
 			//		print_tab(p->tokens);
@@ -540,10 +547,10 @@ void	*process_input(char **input, t_cmd_set *p)
 			if (p->tokens)
 				free_array(&p->tokens);
 		}
-		// ft_printf_fd(2, "procinputwhile psttscode %i\n", p->status_code);
+		ft_printf_fd(2, "procinputwhile psttscode %i\n", p->status_code);
 	}
-	// ft_printf_fd(2, "PRE procinputwhile psttscode=%i gexit=%i\n",
-	// 	p->status_code, g_exit_status);
+	ft_printf_fd(2, "PRE procinputwhile psttscode=%i gexit=%i\n",
+		p->status_code, g_exit_status);
 	if (p->input_text)
 		free_array(&p->input_text);
 	if (p->filename)

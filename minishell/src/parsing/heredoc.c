@@ -6,7 +6,7 @@
 /*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:34:03 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/09/01 21:14:12 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/02 18:42:08 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ Return the accumulated text.*/
 char	*get_here_str(char *str[3], char *lim, t_cmd_set *p, int *line_index)
 {
 	g_exit_status = 0;
-	while (p->status_code != 130 && g_exit_status != 130)
+	while (g_exit_status != 130)
 	{
 		if (!str[1])
 			str[1] = ft_strdup("");
@@ -42,6 +42,7 @@ char	*get_here_str(char *str[3], char *lim, t_cmd_set *p, int *line_index)
 		else
 		{
 			str[0] = readline("> ");
+			printf("STR[0]: %s\n", str[0]);
 			if (!str[0])
 			{
 				error_delim_heredoc(lim);
@@ -54,6 +55,8 @@ char	*get_here_str(char *str[3], char *lim, t_cmd_set *p, int *line_index)
 			break ;
 		str[0] = ft_strjoin(str[0], "\n");
 		free(str[2]);
+		if (g_exit_status == 130)
+			ft_printf_fd(2, "getherestr 130\n");
 	}
 	return (free_all(str[0], NULL, NULL, NULL), str[1]);
 }
@@ -181,8 +184,9 @@ int	read_heredoc_b(char *str[3], char *lim, t_cmd_set *p, int *line_index)
 
 	// ft_printf_fd(2, "readheredoc lim=%s\n", lim);
 	expand = 1;
+	// signal(SIGINT, signals_heredoc);
+	signal(SIGINT, SIG_DFL);
 	signal(SIGINT, signals_heredoc);
-	signal(SIGQUIT, SIG_IGN);
 	if (pipe(fd) == -1)
 		return (put_err("DupForkPipe_Failed", NULL, 1, p), -1);
 	trim_ext_squotes(lim);
@@ -195,8 +199,11 @@ int	read_heredoc_b(char *str[3], char *lim, t_cmd_set *p, int *line_index)
 	if (fd[1] != -1)
 		close(fd[1]);
 	if (g_exit_status == 130)
+	{
+		ft_printf_fd(2, "readheredocb 130\n");
 		return (close(fd[0]), -1);
-	return (fd[0]);
+	}
+		return (fd[0]);
 }
 
 /*Parses a here-document redirection (‘<< LIMIT’) at index *i in args,
