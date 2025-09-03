@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_signals.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ngaurama <ngaurama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:33:23 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/09/02 20:51:02 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/03 22:36:14 by ngaurama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,14 +81,12 @@ ioctl fakes a newline to readline so it returns (simulate press enter).
 Else it would block.*/
 void	signals_heredoc(int signal_code)
 {
-
 	if (signal_code == SIGINT)
 	{
 		g_exit_status = -130;
 		write(STDOUT_FILENO, "\n", 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();
-
 	}
 }
 
@@ -98,13 +96,7 @@ int	rl_heredoc_hook(void)
 	{
 		rl_done = 1;
 		g_exit_status = 130;
-		return 1;
+		return (1);
 	}
-	return 0;
-}
-
-/* Ctrl + z can suspend the program*/
-void	disable_ctrl_z(void)
-{
-	signal(SIGTSTP, SIG_IGN);
+	return (0);
 }

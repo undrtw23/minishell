@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ngaurama <ngaurama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:37:08 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/09/03 01:15:44 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/03 22:48:28 by ngaurama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /* Generate the current working directory via getcwd, print it in bold.
 If getcwd fail, put root instead "/" so the program can continue.
 Append "$ " at the end. */
-static char	*generate_prompt(void)
+char	*generate_prompt(void)
 {
 	char	*cwd;
 	char	*colorcwd;
@@ -42,7 +42,7 @@ static char	*generate_prompt(void)
 /* Normal case for Minishell :
 use readline to get user input (readline handle arrow keys, history, tab...)
 prompt is current working directory -> p->input_text.*/
-static void	handle_interactive_input(t_cmd_set *p)
+void	handle_interactive_input(t_cmd_set *p)
 {
 	char	*readline_input;
 	char	*prompt;
@@ -66,14 +66,12 @@ static void	handle_interactive_input(t_cmd_set *p)
 	}
 }
 
-
-
 /* Test case for minishell, use get next line on stdin to get
 a list of instruction from a file.
 Example : "./minishell < test_script.sh"
 Remove next line delimiter "\n" for processing. */
 
-static char	*read_full_input(void)
+char	*read_full_input(void)
 {
 	char	*line;
 	char	*tmp;
@@ -95,8 +93,7 @@ static char	*read_full_input(void)
 	return (full_input);
 }
 
-
-static void	handle_non_interactive_input(t_cmd_set *p)
+void	handle_non_interactive_input(t_cmd_set *p)
 {
 	char	*full_input;
 
@@ -111,7 +108,6 @@ static void	handle_non_interactive_input(t_cmd_set *p)
 	if (!p->input_text || !p->input_text[0])
 		free_exit(p, p->status_code, NULL);
 }
-
 
 /* Init & set_signal initialise everything we use.
 isatty(0) = Is standard input connected to a terminal?

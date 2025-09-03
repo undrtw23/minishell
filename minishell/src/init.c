@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ngaurama <ngaurama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 16:08:28 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/09/02 22:33:32 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/03 22:48:17 by ngaurama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /* If minishell is launched without environement variables, set basic one
 for minimal execution of the minishell.*/
-static int	allocate_env_vars_if_envp_empty(t_cmd_set *p)
+int	allocate_env_vars_if_envp_empty(t_cmd_set *p)
 {
 	size_t	i;
 	char	*default_env[6];
@@ -58,7 +58,7 @@ void	init_p_struct(t_cmd_set *p)
 	p->shlvl = 0;
 }
 
-static void	init_reset(t_cmd_set *p, char **envp)
+void	init_reset(t_cmd_set *p, char **envp)
 {
 	init_p_struct(p);
 	init_pid_arr(p);

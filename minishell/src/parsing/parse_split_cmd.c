@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_split_cmd.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ngaurama <ngaurama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:38:34 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/08/19 16:48:58 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/03 21:54:09 by ngaurama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ t_cmd	*init_cmd(void)
 {
 	t_cmd	*cmd;
 
-	cmd = malloc(sizeof *cmd);
+	cmd = malloc (sizeof * cmd);
 	if (!cmd)
 		return (put_err(NULL, "Malloc failed", 1, NULL));
 	cmd->args = NULL;
@@ -31,26 +31,24 @@ t_cmd	*init_cmd(void)
 /* i : current index
 Normal quotes checking, if inside quotes it's only one token
 note that ">>" is counted as two tokens.*/
-static int	size_to_malloc(char *s, char *set, int count)
+int	size_to_malloc(char *s, char *set, int count)
 {
-	int	q[2];
+	int	q[3];
 	int	i;
 
 	i = 0;
-	q[0] = 0;
-	q[1] = 0;
+	init_quotes(q);
 	while (s && s[i] != '\0')
 	{
 		count++;
 		if (!ft_strchr(set, s[i]))
 		{
-			while ((!ft_strchr(set, s[i]) || q[0] || q[1]) && s[i] != '\0')
+			while ((!ft_strchr(set, s[i]) || q[2]) && s[i] != '\0')
 			{
-				q[0] = (q[0] + (!q[1] && s[i] == '\'')) % 2;
-				q[1] = (q[1] + (!q[0] && s[i] == '\"')) % 2;
+				upd_quo(q, s[i]);
 				i++;
 			}
-			if (q[0] || q[1])
+			if (q[2])
 				return (-1);
 		}
 		else if (s[i] == s[i + 1] && (s[i] == '<' || s[i] == '>' || s[i] == '&'
@@ -72,7 +70,7 @@ i[2]++ (post-increment)	advance the write cursor.
 i[0] = current scan index
 i[1] = token start
 i[2] = token counter*/
-static char	**add_to_array(char **tmpstr, char *s, char *set, int i[3])
+char	**add_to_array(char **tmpstr, char *s, char *set, int i[3])
 {
 	int	q[2];
 

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_exit.c                                     :+:      :+:    :+:   */
+/*   builtin_exit_b.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 15:35:53 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/07/30 21:10:23 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/03 01:22:45 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,18 +61,19 @@ int	parse_strict_ll(const char *str, long long *out)
 /* Builtin exit for parent context
 Handles `exit` command with numeric validation, overflow detection,
 error messaging, and proper status code truncation. */
-void	builtin_exit(t_list *cmd, t_cmd_set *p)
+int	builtin_exit_b(t_cmd *cmd, t_cmd_set *p)
 {
 	long long	status;
 	char		**args;
 	int			is_exit;
 
 	is_exit = 0;
-	args = ((t_cmd *)cmd->content)->args;
-	ft_putendl_fd("\033[1;31mexit\033[0m", 1);
+	args = cmd->args;
+	if (!p->shlvl && isatty(STDIN_FILENO))
+		ft_putendl_fd("\033[1;31mexit\033[0m", 2);
 	if (!args || !args[1])
 		free_exit(p, 0, NULL);
-	if (!parse_strict_ll(args[1], &status))
+	if (!*args[1] || !parse_strict_ll(args[1], &status))
 	{
 		ft_printf_fd(2, "mini: exit: %s: numeric argument required\n", args[1]);
 		free_exit(p, 2, NULL);
@@ -84,17 +85,18 @@ void	builtin_exit(t_list *cmd, t_cmd_set *p)
 	}
 	if (is_exit == 0)
 		free_exit(p, status & 255, NULL);
+	return (is_exit);
 }
 
 /* Builtin exit for child process
 Validates argument format and overflow, returns proper exit code,
 and reports errors as needed without exiting the program. */
-int	builtin_exit_child(t_list *cmd)
+int	builtin_exit_child_b(t_cmd *cmd)
 {
 	long long	status;
 	char		**args;
 
-	args = ((t_cmd *)cmd->content)->args;
+	args = cmd->args;
 	if (!args || !args[1])
 		return (0);
 	if (!parse_strict_ll(args[1], &status))

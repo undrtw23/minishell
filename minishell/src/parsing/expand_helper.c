@@ -6,7 +6,7 @@
 /*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 23:22:46 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/08/29 21:59:00 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/03 09:16:23 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ char	*put_char_in_squotes(char *str, size_t pos)
 	free(tmp);
 	free(right);
 	free(str);
-	//ft_printf_fd(2, "putcharinsquotes left=%s\n", left);
 	return (left);
 }
 
@@ -70,7 +69,8 @@ char	*put_char_in_squotes(char *str, size_t pos)
 echo $"USER" = USER and not $USER
 only when we are *outside* any existing quote context.*/
 /* also: "\\" becomes "\" and "$\" becomes "\" */
-/* also "\$" or "\*" becomes "'\'$" or "'*'\" in order to escape the expanding char*/
+/* also "\$" or "\*" becomes "'\'$" or 
+"'*'\" in order to escape the expanding char*/
 char	*remove_dollar_quote(char *str)
 {
 	size_t	i;
@@ -82,13 +82,12 @@ char	*remove_dollar_quote(char *str)
 	in_dquote = 0;
 	while (str && str[i])
 	{
-		//ft_printf_fd(2, "removedollar str[%i]=%s sq=%i dq=%i\n", i, str + i, in_squote, in_dquote);
 		track_quotes(&in_squote, &in_dquote, str[i]);
 		if (in_squote == 0 && in_dquote == 0 && str[i] == '\\' && str[i + 1]
 			&& str[i + 1] == '\\')
 			str = remove_char_at(str, i);
 		else if (in_squote == 0 && in_dquote == 0 && str[i] == '\\' && str[i
-			+ 1] && (str[i + 1] == '$' || str[i + 1] == '*'))
+				+ 1] && (str[i + 1] == '$' || str[i + 1] == '*'))
 		{
 			str = put_char_in_squotes(str, i);
 			i = i + 2;

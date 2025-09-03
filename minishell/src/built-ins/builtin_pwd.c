@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_pwd.c                                      :+:      :+:    :+:   */
+/*   builtin_pwd_b.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cwang <cwang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 23:58:29 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/05/28 16:23:14 by cwang            ###   ########.fr       */
+/*   Updated: 2025/07/15 22:42:18 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
 /* Use getcwd to get the current dir then print it. */
-int	builtin_pwd(void)
+int	builtin_pwd_b(void)
 {
 	char	*buf;
 

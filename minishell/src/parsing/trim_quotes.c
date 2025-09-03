@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   trim_quotes.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cwang <cwang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ngaurama <ngaurama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:40:47 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/05/28 16:24:53 by cwang            ###   ########.fr       */
+/*   Updated: 2025/09/03 22:48:09 by ngaurama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /* As always, inside quotes checker.
 Calculate exactly of many spaces need to be removed for the new malloc.
 Check if quotes are not closed (security as it's already done before)*/
-static int	check_quotes_get_len(char const *s1)
+int	check_quotes_get_len(char const *s1)
 {
 	int	count;
 	int	i;

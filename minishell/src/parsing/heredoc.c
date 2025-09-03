@@ -3,127 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ngaurama <ngaurama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:34:03 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/09/02 20:58:10 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/03 21:39:03 by ngaurama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-/* Function ta accumulate the raw heredoc text (reading).
-Run until Ctrl+C (SIGINT) is threw.
-str[0] = current input line
-str[1] = accumulated buffer
-str[2] = scratch pointer
-Ensure that pointer are not NULL
-str[0] = readline("> "); prompt the user to continue writing.
-if a line is matching the delimiter, break.
-otherwise, append newline and continue.
-Return the accumulated text.*/
-char	*get_here_str(char *str[3], char *lim, t_cmd_set *p, int *line_index)
-{
-	g_exit_status = 0;
-	while (g_exit_status != 130)
-	{
-		if (!str[1])
-			str[1] = ft_strdup("");
-		if (!str[0])
-			str[0] = ft_strdup("");
-		str[2] = str[1];
-		str[1] = ft_strjoin(str[1], str[0]);
-		free_all(str[0], str[2], NULL, NULL);
-		if (p->input_text && p->input_text[*line_index])
-		{
-			str[0] = ft_strdup(p->input_text[*line_index]);
-			(*line_index)++;
-		}
-		else
-		{
-			str[0] = readline("> ");
-			if (g_exit_status == 130)
-				break ;
-			if (!str[0])
-			{
-				error_delim_heredoc(lim);
-				break ;
-			}
-		}
-		str[2] = str[0];
-		if (str[2] && !ft_strncmp(str[2], lim, ft_strlen(str[2]))
-			&& ft_strlen(str[2]) == ft_strlen(lim))
-			break ;
-		str[0] = ft_strjoin(str[0], "\n");
-		free(str[2]);
-	}
-	return (free_all(str[0], NULL, NULL, NULL), str[1]);
-}
-
-/* Writing tool for when the heredoc finished.
-str[1] is the final heredoc buffer from get_here_str
-fd[1] is the write end of the heredoc pipe
-expand = 0 -> do not expand variables.*/
-static void	process_here(char *str[1], int fd[2], t_cmd_set *p, int expand)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (str && str[1] && str[1][i])
-	{
-		j = i + 1;
-		if (str[1][i] && str[1][i] == '$' && str[1][j] && ft_isalnum(str[1][j])
-			&& expand)
-			handle_env_vars(str[1], &i, fd, p);
-		else if (str[1][i])
-			write(fd[1], &str[1][i], 1);
-		i++;
-	}
-}
-
-/* Remove quotes from the delimiter if they exist.*/
 char	*trim_all_quotes(char *str)
 {
 	size_t	len;
-	size_t	result_len;
-	size_t	i;
+	size_t	head[2];
 	char	*result;
-	size_t	j;
 	int		quo[3];
 
-	quo[0] = 0;
-	quo[1] = 0;
-	quo[2] = 0;
+	head[0] = -1;
+	init_quotes(quo);
 	len = ft_strlen(str);
-	result_len = 0;
-	i = -1;
-	while (++i < len)
-	{
-		if (!((str[i] == '\'' && quo[1] == 0) || (str[i] == '\"'
-					&& quo[0] == 0)))
-			result_len++;
-		upd_quo(quo, str[i]);
-	}
-	result = (char *)malloc(result_len + 1);
+	head[0] = -1;
+	result = (char *)malloc(len + 1);
 	if (!result)
-	{
 		return (NULL);
-	}
-	j = 0;
-	i = -1;
-	quo[0] = 0;
-	quo[1] = 0;
-	quo[2] = 0;
-	while (++i < len)
+	head[1] = 0;
+	head[0] = -1;
+	init_quotes(quo);
+	while (++head[0] < len)
 	{
-		if (!((str[i] == '\'' && quo[1] == 0) || (str[i] == '\"'
+		if (!((str[head[0]] == '\'' && quo[1] == 0) || (str[head[0]] == '\"'
 					&& quo[0] == 0)))
-			result[j++] = str[i];
-		upd_quo(quo, str[i]);
+			result[head[1]++] = str[head[0]];
+		upd_quo(quo, str[head[0]]);
 	}
-	result[j] = '\0';
+	result[head[1]] = '\0';
 	return (result);
 }
 
@@ -175,19 +88,16 @@ void	trim_ext_squotes(char *lim)
 	lim[i++] = '\0';
 	lim[i] = '\0';
 }
-/* new read_heredoc */
+
 int	read_heredoc_b(char *str[3], char *lim, t_cmd_set *p, int *line_index)
 {
 	int	fd[2];
 	int	expand;
-	
 
-	// ft_printf_fd(2, "readheredoc lim=%s\n", lim);
 	expand = 1;
 	signal(SIGINT, signals_heredoc);
 	rl_event_hook = rl_heredoc_hook;
 	signal(SIGQUIT, SIG_IGN);
-	// signal(SIGINT, SIG_DFL);
 	if (pipe(fd) == -1)
 		return (put_err("DupForkPipe_Failed", NULL, 1, p), -1);
 	trim_ext_squotes(lim);

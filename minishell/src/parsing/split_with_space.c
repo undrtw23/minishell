@@ -6,7 +6,7 @@
 /*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:40:04 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/08/29 01:21:10 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/03 20:40:31 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ q[1] hold here 0 : if not in any quote
 34 : double quote
 39 : single quote
 while we are in quotes, count as one token*/
-static int	token_counter(const char *s, char *c, int i[2])
+int	token_counter(const char *s, char *c, int i[2])
 {
 	int	q[2];
 
@@ -54,7 +54,7 @@ and store it in i[1].
 Advance until next space(if not in quotes)
 i[2] : token index
 Defensive empty token "\0" if we go beyond input.*/
-static char	**split_with_quotes(char **tmpstr, char *s, char *set, int i[3])
+char	**split_with_quotes(char **tmpstr, char *s, char *set, int i[3])
 {
 	int	s_len;
 	int	q[3];
@@ -65,18 +65,14 @@ static char	**split_with_quotes(char **tmpstr, char *s, char *set, int i[3])
 	s_len = ft_strlen(s);
 	while (s[i[0]])
 	{
-		// ft_printf_fd(2, "splitwq s[i[0]]=%s\n", s + i[0]);
 		while (s[i[0]] && ft_strchr(set, s[i[0]]) && s[i[0]] != '\0')
 			i[0]++;
 		i[1] = i[0];
 		while (s[i[0]] && (!ft_strchr(set, s[i[0]]) || q[2]))
 		{
 			upd_quo(q, s[i[0]]);
-			// q[0] = (q[0] + (!q[1] && s[i[0]] == '\'')) % 2;
-			// q[1] = (q[1] + (!q[0] && s[i[0]] == '\"')) % 2;
 			i[0]++;
 		}
-		// ft_printf_fd(2, "splitwq s=%s, i[1]=%i, i[0]-i[1]=%i\n", s, i[1], i[0] - i[1]);
 		if (i[1] >= s_len)
 			tmpstr[i[2]++] = "\0";
 		else
@@ -111,6 +107,5 @@ char	**split_and_ignore_space_if_in_quote(char *s, char *set)
 		return (put_err(NULL, "Malloc failed", 1, NULL), NULL);
 	tmpstr = split_with_quotes(tmpstr, s, set, i);
 	tmpstr[nwords] = NULL;
-	// print_tab(tmpstr);
 	return (tmpstr);
 }

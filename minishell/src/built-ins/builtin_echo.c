@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_echo.c                                     :+:      :+:    :+:   */
+/*   builtin_echo_b.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cwang <cwang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 23:57:40 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/05/28 16:23:00 by cwang            ###   ########.fr       */
+/*   Updated: 2025/09/02 22:41:57 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-/* Used in builtin echo to count the number of characters that are 'n' in an 
+/* Used in builtin echo to count the number of characters that are 'n' in an
 argument of function echo.
 ex : "echo -nnnn" : c_count = 4 = ft_strlen(arg[1]) - 1*/
 int	c_count(char *s, char c)
@@ -34,7 +34,7 @@ int	c_count(char *s, char c)
 /* First check if -n (or -nnnn is present) via c_count and flag print_newline
 j is flag to check if we started printing or not. Start at arg[1].
 Print every arg with one and only one space between them.*/
-int	builtin_echo(t_list *cmd)
+int	builtin_echo_b(t_cmd *cmd)
 {
 	int		print_newline;
 	int		i;
@@ -44,7 +44,7 @@ int	builtin_echo(t_list *cmd)
 	i = 0;
 	j = 0;
 	print_newline = 1;
-	args = ((t_cmd *)cmd->content)->args;
+	args = cmd->args;
 	while (args && args[++i])
 	{
 		if (!j && !ft_strncmp(args[i], "-n", 2) && (c_count(args[i],

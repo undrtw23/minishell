@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_checker.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cwang <cwang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ngaurama <ngaurama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 13:16:17 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/05/28 16:24:49 by cwang            ###   ########.fr       */
+/*   Updated: 2025/09/03 22:48:06 by ngaurama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /* Checks if the character c is a redirection operator ('<' or '>').
 Returns 1 if it is, 0 otherwise. */
-static int	is_redir(char c)
+int	is_redir(char c)
 {
 	char	c2;
 
@@ -28,7 +28,7 @@ static int	is_redir(char c)
 Returns "|" for a leading pipe or two consecutive pipes, 
 "eof" for a pipe at the end,
 or NULL if there is no pipe-related syntax error. */
-static char	*pipe_error(char **tok, int idx)
+char	*pipe_error(char **tok, int idx)
 {
 	char	*next;
 
@@ -50,7 +50,7 @@ Returns error codes for too many consecutive redirection tokens,
  missing arguments,
 invalid combinations like '<>', or redirection followed by a pipe.
 Returns NULL if there is no redirection-related syntax error. */
-static char	*redir_error(char **tok, int idx)
+char	*redir_error(char **tok, int idx)
 {
 	char	c;
 	int		n;

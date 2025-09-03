@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ngaurama <ngaurama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:31:19 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/09/02 22:54:26 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/03 22:47:58 by ngaurama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*Duplicate dir into temp_dir, append "/" to it
 then append the command.
 free temp and return cmd_path*/
-static char	*build_cmd_path(const char *dir, const char *cmd)
+char	*build_cmd_path(const char *dir, const char *cmd)
 {
 	char	*temp_dir;
 	char	*temp;
@@ -72,7 +72,7 @@ Split the $PATH variable into an array:
 call find command
 if nothing found and last command error code 127
 else 0 (executed in child)*/
-static void	process_checks(t_node *node, char *path, t_cmd_set *p, char ***s)
+void	process_checks(t_node *node, char *path, t_cmd_set *p, char ***s)
 {
 	t_cmd	*n;
 
@@ -102,7 +102,7 @@ and replace arg[0] with the command /bin/ls -> ls
 if not fallback to process_check.
 if the cmd is not a directory, dir is null and conditions in
 find_cmd_path will be false.*/
-static DIR	*cmd_checks(t_node *node, char ***s, char *path, t_cmd_set *p)
+DIR	*cmd_checks(t_node *node, char ***s, char *path, t_cmd_set *p)
 {
 	t_cmd	*n;
 	DIR		*dir;

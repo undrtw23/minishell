@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_errors_helper.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cwang <cwang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ngaurama <ngaurama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:06:41 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/05/28 16:25:06 by cwang            ###   ########.fr       */
+/*   Updated: 2025/09/03 22:36:26 by ngaurama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,4 +35,9 @@ void	error_delim_heredoc(char *lim)
 {
 	ft_printf_fd(2, "mini: warning: here-document delimited by end-of-file ");
 	ft_printf_fd(2, "(wanted `%s\')\n", lim);
+}
+
+void	disable_ctrl_z(void)
+{
+	signal(SIGTSTP, SIG_IGN);
 }
