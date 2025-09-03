@@ -6,7 +6,7 @@
 /*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:19:14 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/09/02 20:30:10 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/03 04:46:17 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,14 +98,26 @@ typedef struct s_cmd_set
 	int							status_code;
 	pid_t						pid_of_lst_cmd;
 	int							pipe_flag;
-	pid_t						pid_arr[1024];
+	pid_t						pid_arr[4096];
 	int							pid_index;
 	char						*tmp_dir;
-	int							heredoc[1024];
+	int							heredoc[4096];
 	char						**filename;
 	int							abort;
 	int							shlvl;
 }								t_cmd_set;
+
+typedef struct s_glob_match
+{
+	char						*glob;
+	char						*file;
+	char						*idxglob;
+	char						*idxfile;
+	char						*headglob;
+	char						*headfile;
+	int							quo[3];
+	int							headqstate[3];
+}								t_glob_match;
 
 /* nodetype enumeration, in comments arbitrary values returned in is_nodetype*/
 
@@ -290,6 +302,104 @@ void							*parse_nodes(char **args, t_cmd_set *p);
 
 /*	execute_b*/
 
+void							dup2_and_close(int in_fd, int out_fd);
+int								fork_and_exec(t_node *node, t_cmd *cmd,
+									t_cmd_set *p);
+void							restore_std_fds(int orig_in, int orig_out);
+int								exec_builtins(t_node *node, t_cmd *cmd,
+									t_cmd_set *p);
+int								exec_node_par_builtins_b(t_node *node,
+									t_cmd *cmd, t_cmd_set *p);
+int								wait_and_set_status(t_cmd_set *p);
+
+/* execute_b_nodes1*/
+
+void							handle_globbing(char ***args, int quo[3],
+									t_cmd_set *p);
+int								exec_cmd_node(t_node *node, t_cmd_set *p);
+
+/*	GLOB1*/
+
+int								find_glob(char *token, int *quo);
+char							*advance_str_past_q(char *headglob, int *quo,
+									int prev_q_state);
+int								match_glob(char *glob, char *file);
+char							**expand_glob(char *glob, t_cmd_set *p);
+char							**glob_expander(char ***args, int *i,
+									int quo[3], t_cmd_set *p);
+
+// int								find_glob(char *token, int *quo);
+// void							init_glob_vars(t_glob_match *m, char *glob,
+// 									char *file);
+// void							set_head_vars(t_glob_match *m);
+// int								skip_asterisks(t_glob_match *m);
+// int								handle_skip_case(t_glob_match *m);
+// int								process_char_match(t_glob_match *m,
+// 									int prev_q_state);
+// int								handle_pattern_match(t_glob_match *m);
+// char							*advance_str_past_q(char *headglob, int *quo,
+// 									int prev_q_state);
+// int								process_char_match(t_glob_match *m,
+// 									int prev_q_state);
+// int								handle_pattern_match(t_glob_match *m);
+// int								match_glob(char *glob, char *file);
+// char							**expand_glob(char *glob, t_cmd_set *p);
+// char							**glob_expander(char ***args, int *i,
+// 									int quo[3], t_cmd_set *p);
+
+/*	builtin_cd_b_normed*/
+
+/*	builtin_export_b1_normed*/
+
+// void	handle_export_var(t_cmd_set *p, char *arg, int *status);
+// int	builtin_export_b(t_cmd_set *p, char **args);
+
+// /*	builtin_export_b2_normed*/
+
+// int	var_in_envp(char *arg, char **envp, int *idx);
+// int	is_valid_identifier(char *str);
+// void	sort_env(char **arr, int len);
+
+/* execute_b_nodes2*/
+
+/* execute_b_nodes3*/
+
+/* execute_b_nodes4*/
+
+/* execute_b_nodes5*/
+
+/* execute_glob*/
+
+// int								find_glob(char *token, int *quo);
+// char							*advance_str_past_q(char *headglob, int *quo,
+// 									int prev_q_state);
+// char							**expand_glob(char *glob, t_cmd_set *p);
+
+// /* execute_glob2*/
+
+// static void						advance_heads(t_match_state *ms);
+// static void						update_indices(t_match_state *ms,
+// 									char **idxfile, char **idxglob);
+// static int						scan_match(char **idxglob, char **idxfile,
+// 									t_match_state *ms);
+// int								match_glob(char *glob, char *file);
+
+// /* execute_glob3*/
+// static void						init_match_state(char **idxglob,
+//	char **idxfile,
+// 									t_match_state *ms);
+// static int						skip_stars(char **idxglob, int quoted);
+
+// /* execute_glob4*/
+
+// static void						reset_quote_state(t_match_state *ms);
+// static void						store_head_state(t_match_state *ms);
+// static int						handle_quotes_during_scan(t_match_state *ms,
+// 									char **idxglob, char **headglob,
+// 									int *prev_q_state);
+
+/*	execute_b*/
+
 int								exec_builtins(t_node *node, t_cmd *cmd,
 									t_cmd_set *p);
 int								chk_inf_node_redir_perm(t_node *node,
@@ -302,5 +412,24 @@ int								exec_node(t_node *node, t_cmd_set *p);
 int								exec_cmd_node(t_node *node, t_cmd_set *p);
 int								exec_node_par_builtins_b(t_node *node,
 									t_cmd *cmd, t_cmd_set *p);
+
+/*	execute_glob1,2,3*/
+
+// int								find_glob(char *token, int *quo);
+// char							*advance_str_past_q(char *headglob, int *quo,
+// 									int prev_q_state);
+// char							**expand_glob(char *glob, t_cmd_set *p);
+// char							**glob_expander(char ***args, int *i,
+// 									int quo[3], t_cmd_set *p);
+// static void						advance_heads(t_match_state *ms);
+// static void						update_indices(t_match_state *ms,
+// 									char **idxfile, char **idxglob);
+// static int						scan_match(char **idxglob, char **idxfile,
+// 									t_match_state *ms);
+// int								match_glob(char *glob, char *file);
+// static void						init_match_state(char **idxglob,
+// char **idxfile,
+// 									t_match_state *ms, char *glob, char *file);
+// static int						skip_stars(char **idxglob, int quoted);
 
 #endif

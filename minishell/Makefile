@@ -6,7 +6,7 @@
 #    By: alsima <alsima@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/22 18:50:02 by gkorzecz          #+#    #+#              #
-#    Updated: 2025/08/28 02:46:05 by alsima           ###   ########.fr        #
+#    Updated: 2025/09/03 03:10:49 by alsima           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,17 +44,18 @@ SRC_FILES	=      $(PARS)heredoc.c $(PARS)parse_nodes.c $(PARS)process_input_help
 					$(PARS)parse_split_cmd.c $(PARS)process_input.c $(PARS)split_with_space.c \
 					 $(PARS)syntax_checker.c $(PARS)trim_quotes.c $(PARS)expand.c \
 					 $(PARS)expand_helper.c $(PARS)create_fds.c \
+					$(BI)builtin_export_b_nitai.c \
 					$(BI)builtin_cd_b.c   $(BI)builtin_checker.c $(BI)builtin_echo_b.c\
 					$(BI)builtin_env_b.c  $(BI)builtin_exit_b.c\
-					$(BI)builtin_export_b.c\
 					$(BI)builtin_pwd_b.c  $(BI)builtin_unset_b.c\
 					$(BI)environement.c\
-					$(EXEC)execute_b.c $(EXEC)find_path.c\
-					$(EXEC)find_path_helper.c\
+					$(EXEC)execute_b.c $(EXEC)execute_b_nodes1.c $(EXEC)find_path.c $(EXEC)GLOB1.c \
+					$(EXEC)find_path_helper.c \
 					$(SGE)handle_errors.c $(SGE)handle_errors_helper.c $(SGE)handle_signals.c\
 					$(UTI)free_exit.c $(UTI)utils.c $(UTI)utils_array.c\
 					$(UTI)utils_free.c \
-					$(SRC_DIR_F)/init.c $(SRC_DIR_F)/main.c
+					$(SRC_DIR_F)/init.c $(SRC_DIR_F)/init2.c $(SRC_DIR_F)/main.c
+#$(BI)builtin_export_b_normed.c $(BI)builtin_export_b2_normed.c
 
 OBJ_FILES = $(SRC_FILES:$(SRC_DIR_F)/%.c=$(OBJ_DIR)/%.o)
 

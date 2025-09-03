@@ -6,7 +6,7 @@
 /*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 15:36:07 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/09/01 19:08:41 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/02 22:38:16 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,6 @@ static void	ft_chdir(char ***av, char *home, char *oldpwd, t_cmd_set *p)
 	DIR	*dir;
 
 	dir = NULL;
-	// ft_printf_fd(2, "ftchdir\n");
-	// print_tab(*av);
 	if (av[0][1] && av[0][1][0] == '~' && ft_strlen(av[0][1]) == 1 && home
 		&& *home)
 	{
@@ -86,10 +84,6 @@ void	check_home_pwd_oldpwd(t_cmd_set *p)
 	cwd = getcwd(NULL, 0);
 	pwd = ft_getenv("PWD", p->envp);
 	oldpwd = ft_getenv("OLDPWD", p->envp);
-	//	if (!pwd)
-	//		p->envp = ft_setenv("PWD", cwd, p->envp);
-	//	if (!oldpwd)
-	//		p->envp = ft_setenv("OLDPWD", cwd, p->envp);
 	free_all(pwd, oldpwd, cwd, NULL);
 }
 

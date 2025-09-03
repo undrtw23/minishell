@@ -6,7 +6,7 @@
 /*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 16:08:28 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/08/29 19:58:37 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/02 22:33:32 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,28 +36,11 @@ static int	allocate_env_vars_if_envp_empty(t_cmd_set *p)
 	return (1);
 }
 
-void	init_pid_arr(t_cmd_set *p)
-{
-	int	i;
-
-	i = -1;
-	while (++i < 1024)
-		p->pid_arr[i] = 0;
-}
-
-void	init_heredoc_arr(t_cmd_set *p)
-{
-	int	i;
-
-	i = -1;
-	while (++i < 1024)
-		p->heredoc[i] = -1;
-}
 /* Global initialisation of minishell.
 Initalise a t_cmd_set and the global exit status variable.
 If env exist and not empty, cuplicate it in envp, if not
 use helper function for basic env variable.*/
-static void	init_reset(t_cmd_set *p, char **envp)
+void	init_p_struct(t_cmd_set *p)
 {
 	p->tokens = NULL;
 	p->token_count = 0;
@@ -69,12 +52,17 @@ static void	init_reset(t_cmd_set *p, char **envp)
 	p->pid_of_lst_cmd = 0;
 	p->pipe_flag = 0;
 	p->pid_index = 0;
-	init_pid_arr(p);
-	init_heredoc_arr(p);
 	p->tmp_dir = NULL;
 	p->filename = NULL;
 	p->abort = 0;
 	p->shlvl = 0;
+}
+
+static void	init_reset(t_cmd_set *p, char **envp)
+{
+	init_p_struct(p);
+	init_pid_arr(p);
+	init_heredoc_arr(p);
 	if (envp && *envp)
 		p->envp = ft_dup_array(envp);
 	if (!p->envp || !(envp && *envp))
@@ -128,5 +116,3 @@ void	init(t_cmd_set *p, char **envp, char **argv, int argc)
 	p->envp = ft_setenv("SHLVL", num, p->envp);
 	free_all(num, cwd, shlvl, path);
 }
-
-

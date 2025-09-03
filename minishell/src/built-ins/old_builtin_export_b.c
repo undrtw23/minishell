@@ -6,7 +6,7 @@
 /*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 15:35:26 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/08/29 01:53:55 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/02 22:46:23 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,3 +156,5 @@ int	builtin_export_b(t_cmd_set *p, char **args)
 	}
 	return (status);
 }
+
+

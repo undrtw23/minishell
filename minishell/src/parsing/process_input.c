@@ -6,7 +6,7 @@
 /*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:39:27 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/09/02 22:16:21 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/03 04:48:23 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,11 +165,11 @@ char	**init_filename_tab(void)
 	int		i;
 	char	**filename;
 
-	filename = (char **)malloc(sizeof(char *) * 1024);
+	filename = (char **)malloc(sizeof(char *) * 4096);
 	if (!filename)
 		return (NULL);
 	i = -1;
-	while (++i < 1024)
+	while (++i < 4096)
 		filename[i] = NULL;
 	return (filename);
 }
@@ -327,8 +327,12 @@ char	**split_by_op_ign_space_in_quote(char *input, char *ops, t_cmd_set *p)
 	i = -1;
 	a = NULL;
 	p->token_count = count_tokens(input, ops);
-	if (!p->token_count)
+	if (!p->token_count || p->token_count > 2047)
+	{
+		if (p->token_count > 2047)
+			put_err(NULL, "Token limit surpassed", 1, p);
 		return (NULL);
+	}
 	a = (char **)malloc(sizeof(char *) * (p->token_count + 1));
 	if (!a)
 		return (put_err(NULL, "Malloc error", 1, p), NULL);
@@ -456,7 +460,7 @@ void	free_filename_tab(t_cmd_set *p)
 	int	i;
 
 	i = -1;
-	while (++i < 1024)
+	while (++i < 4096)
 		if (p->filename[i])
 			free(p->filename[i]);
 }

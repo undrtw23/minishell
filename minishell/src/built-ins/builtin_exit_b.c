@@ -6,7 +6,7 @@
 /*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 15:35:53 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/09/01 18:46:21 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/03 01:22:45 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,8 @@ int	builtin_exit_b(t_cmd *cmd, t_cmd_set *p)
 
 	is_exit = 0;
 	args = cmd->args;
-	// print_tab(args);
-	if (!p->shlvl)
+	if (!p->shlvl && isatty(STDIN_FILENO))
 		ft_putendl_fd("\033[1;31mexit\033[0m", 2);
-	//	write(2, "exit\n", 5);
 	if (!args || !args[1])
 		free_exit(p, 0, NULL);
 	if (!*args[1] || !parse_strict_ll(args[1], &status))

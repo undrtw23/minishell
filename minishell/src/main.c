@@ -6,7 +6,7 @@
 /*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:37:08 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/09/01 18:45:10 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/03 01:15:44 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,35 +66,52 @@ static void	handle_interactive_input(t_cmd_set *p)
 	}
 }
 
+
+
 /* Test case for minishell, use get next line on stdin to get
 a list of instruction from a file.
 Example : "./minishell < test_script.sh"
 Remove next line delimiter "\n" for processing. */
-static void	handle_non_interactive_input(t_cmd_set *p)
+
+static char	*read_full_input(void)
 {
 	char	*line;
 	char	*tmp;
-	int		i;
+	char	*full_input;
 
-	(void)tmp;
-	line = NULL;
-	i = -1;
-	tmp = get_next_line(0);
-	p->input_text = ft_split(tmp, '\n');
-	//  print_tab(p->input_text);
-	free(tmp);
+	full_input = NULL;
+	line = get_next_line(0);
+	while (line != NULL)
+	{
+		tmp = full_input;
+		if (tmp)
+			full_input = ft_strjoin(tmp, line);
+		else
+			full_input = ft_strdup(line);
+		free(tmp);
+		free(line);
+		line = get_next_line(0);
+	}
+	return (full_input);
+}
+
+
+static void	handle_non_interactive_input(t_cmd_set *p)
+{
+	char	*full_input;
+
+	full_input = read_full_input();
+	if (full_input)
+	{
+		p->input_text = ft_split(full_input, '\n');
+		free(full_input);
+	}
+	else
+		p->input_text = NULL;
 	if (!p->input_text || !p->input_text[0])
 		free_exit(p, p->status_code, NULL);
-	while (p->input_text[++i] && *(p->input_text[i]))
-	{
-		line = p->input_text[i];
-		p->input_text[i] = ft_strtrim(p->input_text[i], "\n");
-		free(line);
-	}
-	//print_tab(p->input_text);
-	if (p->input_text[0] == NULL)
-		free_exit(p, g_exit_status, "exit\n");
 }
+
 
 /* Init & set_signal initialise everything we use.
 isatty(0) = Is standard input connected to a terminal?
@@ -113,7 +130,6 @@ int	main(int argc, char **argv, char **envp)
 			handle_interactive_input(&p_cmd_set);
 		else
 			handle_non_interactive_input(&p_cmd_set);
-		//		print_tab(p_cmd_set.envp);
 		if (!process_input(p_cmd_set.input_text, &p_cmd_set))
 			break ;
 		free_array(&p_cmd_set.input_text);

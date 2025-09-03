@@ -6,7 +6,7 @@
 /*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:43:42 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/08/28 03:58:46 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/03 04:47:33 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ void	close_fds_except_std(void)
 	int	i;
 
 	i = 3;
-	while (i < 1024)
+	while (i < 4096)
 	{
 		close(i);
 		i++;

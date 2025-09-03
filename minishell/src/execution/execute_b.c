@@ -6,7 +6,7 @@
 /*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 20:59:14 by alsima            #+#    #+#             */
-/*   Updated: 2025/09/02 22:14:23 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/03 04:46:56 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,275 +236,275 @@ int	wait_and_set_status(t_cmd_set *p)
 	return (g_exit_status);
 }
 
-int	find_glob(char *token, int *quo)
-{
-	while (*token)
-	{
-		upd_quo(quo, *token);
-		if (!quo[2] && *token == '*')
-			return (1);
-		token++;
-	}
-	return (0);
-}
+// int	find_glob(char *token, int *quo)
+// {
+// 	while (*token)
+// 	{
+// 		upd_quo(quo, *token);
+// 		if (!quo[2] && *token == '*')
+// 			return (1);
+// 		token++;
+// 	}
+// 	return (0);
+// }
 
-char	*advance_str_past_q(char *headglob, int *quo, int prev_q_state)
-{
-	while (*headglob && (*headglob == '\'' || *headglob == '\"'))
-	{
-		prev_q_state = quo[2];
-		upd_quo(quo, *headglob);
-		headglob++;
-	}
-	return (headglob);
-}
+// char	*advance_str_past_q(char *headglob, int *quo, int prev_q_state)
+// {
+// 	while (*headglob && (*headglob == '\'' || *headglob == '\"'))
+// 	{
+// 		prev_q_state = quo[2];
+// 		upd_quo(quo, *headglob);
+// 		headglob++;
+// 	}
+// 	return (headglob);
+// }
 
-int	match_glob(char *glob, char *file)
-{
-	char	*idxglob;
-	char	*idxfile;
-	char	*headfile;
-	char	*headglob;
-	int		quo[3];
-	int		skip;
-	int		prev_q_state;
-	int		headqstate[3];
+// int	match_glob(char *glob, char *file)
+// {
+// 	char	*idxglob;
+// 	char	*idxfile;
+// 	char	*headfile;
+// 	char	*headglob;
+// 	int		quo[3];
+// 	int		skip;
+// 	int		prev_q_state;
+// 	int		headqstate[3];
 
-	prev_q_state = 0;
-	quo[0] = 0;
-	quo[1] = 0;
-	quo[2] = 0;
-	idxglob = glob;
-	idxfile = file;
-	skip = 0;
-	// ft_printf_fd(2, "matchglob glob=%s file=%s\n", glob, file);
-	while (*idxglob)
-	{
-		// ft_printf_fd(2, "	matchglob start idxglob=%s idxfile=%s\n",
-		//		idxglob,
-		// 		idxfile);
-		skip = 0;
-		while (*idxglob && !quo[2] && *idxglob == '*')
-		{
-			idxglob++;
-			skip = 1;
-		}
-		if (!*idxglob)
-			return (1);
-		if (*idxglob && !*idxfile)
-			return (0);
-		headfile = idxfile;
-		headglob = idxglob;
-		headqstate[0] = quo[0];
-		headqstate[1] = quo[1];
-		headqstate[2] = quo[2];
-		while (*headglob && *headfile && (*headglob != '*' || quo[2]))
-		{
-			prev_q_state = quo[2];
-			upd_quo(quo, *headglob);
-			// ft_printf_fd(2,
-			// 	"matchglob mid hglob=%s hfile=%s quo[2]=%i prevqs=%i\n",
-			// 	headglob, headfile, quo[2], prev_q_state);
-			if (quo[2] != prev_q_state && *(headglob + 1))
-			{
-				headglob++;
-				idxglob++;
-				continue ;
-			}
-			if (*headglob == '*' && !quo[2])
-			{
-				idxglob = headglob;
-				continue ;
-			}
-			// ft_printf_fd(2,
-			// 	"matchglob beforeskip hglob=%s hfile=%s quo[2]=%i prevqs=%i\n",
-			// 	headglob, headfile, quo[2], prev_q_state);
-			if (skip)
-			{
-				while (headfile)
-				{
-					headfile = ft_strchr(headfile, *headglob);
-					if (!headfile)
-						return (0);
-					while (*headfile && *headglob && (*headglob != '*'
-							|| quo[2]) && (*headfile == *headglob))
-					{
-						// ft_printf_fd(2, "skipin2ndwhile hglob=%s hfile=%s\n",
-						// 	headglob, headfile);
-						headglob++;
-						headfile++;
-						if (!*headglob && *headfile && ((headglob
-									- idxglob) == 1))
-						{
-							headglob = idxglob;
-							headfile = ft_strchr(headfile, *headglob);
-							continue ;
-						}
-						headglob = advance_str_past_q(headglob, quo,
-								prev_q_state);
-					}
-					// ft_printf_fd(2, "skipafter2ndwhile hglob=%s hfile=%s\n",
-					// 	headglob, headfile);
-					if (!*headfile || !*headglob || (*headglob == '*'
-							&& !quo[2]))
-						break ;
-					else
-					{
-						headglob = idxglob;
-						headfile++;
-						headfile = ft_strchr(headfile, *headglob);
-					}
-				}
-				skip = 0;
-			}
-			else if (*headfile != *headglob)
-				return (0);
-			else if (*headfile == *headglob)
-			{
-				headfile++;
-				headglob++;
-			}
-			headglob = advance_str_past_q(headglob, quo, prev_q_state);
-			if (!headfile)
-				return (0);
-			// ft_printf_fd(2, "	matchglob headglob=%s headfile=%s\n",
-			//		headglob,
-			// 		headfile);
-			if (!*headglob)
-			{
-				if (!*headfile)
-					return (1);
-				else
-				{
-					headglob = idxglob;
-					quo[0] = headqstate[0];
-					quo[1] = headqstate[1];
-					quo[2] = headqstate[2];
-					continue ;
-				}
-			}
-			idxfile = headfile;
-			idxglob = headglob;
-		}
-	}
-	return (1);
-}
+// 	prev_q_state = 0;
+// 	quo[0] = 0;
+// 	quo[1] = 0;
+// 	quo[2] = 0;
+// 	idxglob = glob;
+// 	idxfile = file;
+// 	skip = 0;
+// 	// ft_printf_fd(2, "matchglob glob=%s file=%s\n", glob, file);
+// 	while (*idxglob)
+// 	{
+// 		// ft_printf_fd(2, "	matchglob start idxglob=%s idxfile=%s\n",
+// 		//		idxglob,
+// 		// 		idxfile);
+// 		skip = 0;
+// 		while (*idxglob && !quo[2] && *idxglob == '*')
+// 		{
+// 			idxglob++;
+// 			skip = 1;
+// 		}
+// 		if (!*idxglob)
+// 			return (1);
+// 		if (*idxglob && !*idxfile)
+// 			return (0);
+// 		headfile = idxfile;
+// 		headglob = idxglob;
+// 		headqstate[0] = quo[0];
+// 		headqstate[1] = quo[1];
+// 		headqstate[2] = quo[2];
+// 		while (*headglob && *headfile && (*headglob != '*' || quo[2]))
+// 		{
+// 			prev_q_state = quo[2];
+// 			upd_quo(quo, *headglob);
+// 			// ft_printf_fd(2,
+// 			// 	"matchglob mid hglob=%s hfile=%s quo[2]=%i prevqs=%i\n",
+// 			// 	headglob, headfile, quo[2], prev_q_state);
+// 			if (quo[2] != prev_q_state && *(headglob + 1))
+// 			{
+// 				headglob++;
+// 				idxglob++;
+// 				continue ;
+// 			}
+// 			if (*headglob == '*' && !quo[2])
+// 			{
+// 				idxglob = headglob;
+// 				continue ;
+// 			}
+// 			// ft_printf_fd(2,
+// 			// 	"matchglob beforeskip hglob=%s hfile=%s quo[2]=%i prevqs=%i\n",
+// 			// 	headglob, headfile, quo[2], prev_q_state);
+// 			if (skip)
+// 			{
+// 				while (headfile)
+// 				{
+// 					headfile = ft_strchr(headfile, *headglob);
+// 					if (!headfile)
+// 						return (0);
+// 					while (*headfile && *headglob && (*headglob != '*'
+// 							|| quo[2]) && (*headfile == *headglob))
+// 					{
+// 						// ft_printf_fd(2, "skipin2ndwhile hglob=%s hfile=%s\n",
+// 						// 	headglob, headfile);
+// 						headglob++;
+// 						headfile++;
+// 						if (!*headglob && *headfile && ((headglob
+// 									- idxglob) == 1))
+// 						{
+// 							headglob = idxglob;
+// 							headfile = ft_strchr(headfile, *headglob);
+// 							continue ;
+// 						}
+// 						headglob = advance_str_past_q(headglob, quo,
+// 								prev_q_state);
+// 					}
+// 					// ft_printf_fd(2, "skipafter2ndwhile hglob=%s hfile=%s\n",
+// 					// 	headglob, headfile);
+// 					if (!*headfile || !*headglob || (*headglob == '*'
+// 							&& !quo[2]))
+// 						break ;
+// 					else
+// 					{
+// 						headglob = idxglob;
+// 						headfile++;
+// 						headfile = ft_strchr(headfile, *headglob);
+// 					}
+// 				}
+// 				skip = 0;
+// 			}
+// 			else if (*headfile != *headglob)
+// 				return (0);
+// 			else if (*headfile == *headglob)
+// 			{
+// 				headfile++;
+// 				headglob++;
+// 			}
+// 			headglob = advance_str_past_q(headglob, quo, prev_q_state);
+// 			if (!headfile)
+// 				return (0);
+// 			// ft_printf_fd(2, "	matchglob headglob=%s headfile=%s\n",
+// 			//		headglob,
+// 			// 		headfile);
+// 			if (!*headglob)
+// 			{
+// 				if (!*headfile)
+// 					return (1);
+// 				else
+// 				{
+// 					headglob = idxglob;
+// 					quo[0] = headqstate[0];
+// 					quo[1] = headqstate[1];
+// 					quo[2] = headqstate[2];
+// 					continue ;
+// 				}
+// 			}
+// 			idxfile = headfile;
+// 			idxglob = headglob;
+// 		}
+// 	}
+// 	return (1);
+// }
 
-char	**expand_glob(char *glob, t_cmd_set *p)
-{
-	DIR				*dir;
-	struct dirent	*entry;
-	char			**exp;
-	char			*file[2];
+// char	**expand_glob(char *glob, t_cmd_set *p)
+// {
+// 	DIR				*dir;
+// 	struct dirent	*entry;
+// 	char			**exp;
+// 	char			*file[2];
 
-	exp = NULL;
-	dir = opendir(".");
-	if (!dir)
-		put_err("opendir error", NULL, 1, p);
-	(void)p;
-	entry = readdir(dir);
-	// ft_printf_fd(2, "expandglob glob=%s\n", glob);
-	// remove_token_brackets(glob);
-	// ft_printf_fd(2, "expandglob glob=%s\n", glob);
-	while (entry != NULL)
-	{
-		file[0] = NULL;
-		file[0] = entry->d_name;
-		entry = readdir(dir);
-		if (file[0] && file[0][0] == '.')
-			continue ;
-		// ft_printf_fd(2, "expandglob glob=%s, file=%s\n", glob, file[0]);
-		if (match_glob(glob, file[0]))
-			exp = ft_array_insert(exp, file[0]);
-	}
-	closedir(dir);
-	return (exp);
-}
+// 	exp = NULL;
+// 	dir = opendir(".");
+// 	if (!dir)
+// 		put_err("opendir error", NULL, 1, p);
+// 	(void)p;
+// 	entry = readdir(dir);
+// 	// ft_printf_fd(2, "expandglob glob=%s\n", glob);
+// 	// remove_token_brackets(glob);
+// 	// ft_printf_fd(2, "expandglob glob=%s\n", glob);
+// 	while (entry != NULL)
+// 	{
+// 		file[0] = NULL;
+// 		file[0] = entry->d_name;
+// 		entry = readdir(dir);
+// 		if (file[0] && file[0][0] == '.')
+// 			continue ;
+// 		// ft_printf_fd(2, "expandglob glob=%s, file=%s\n", glob, file[0]);
+// 		if (match_glob(glob, file[0]))
+// 			exp = ft_array_insert(exp, file[0]);
+// 	}
+// 	closedir(dir);
+// 	return (exp);
+// }
 
-char	**glob_expander(char ***args, int *i, int quo[3], t_cmd_set *p)
-{
-	char	**exp;
-	int		expand;
+// char	**glob_expander(char ***args, int *i, int quo[3], t_cmd_set *p)
+// {
+// 	char	**exp;
+// 	int		expand;
 
-	quo[0] = 0;
-	quo[1] = 0;
-	quo[2] = 0;
-	(void)p;
-	expand = 0;
-	exp = NULL;
-	// print_tab(*args);
-	// ft_printf_fd(2, " before fndglob args[%i]=%s\n", (int)(*i), *(*args
-	// + *i));
-	expand = find_glob(*(*args + *i), quo);
-	// ft_printf_fd(2, "globexpander token=%s expand=%i\n", *(*args + *i),
-	// expand);
-	if (ft_strcmp("export", *(*args)) && expand)
-	{
-		exp = expand_glob(*(*args + *i), p);
-		// print_tab(exp);
-		if (!exp)
-		{
-			// ft_printf_fd(2, "globexpander glob 0 finds glob=%s\n",
-			// *(*args + *i));
-			remove_token_brackets(*(*args + *i));
-			return (*args);
-		}
-		*args = ft_array_replace(args, exp, *i);
-		*i = *i + ft_arr_len(exp) - 1;
-		free_array(&exp);
-	}
-	else
-		remove_token_brackets(*(*args + *i));
-	return (*args);
-}
+// 	quo[0] = 0;
+// 	quo[1] = 0;
+// 	quo[2] = 0;
+// 	(void)p;
+// 	expand = 0;
+// 	exp = NULL;
+// 	// print_tab(*args);
+// 	// ft_printf_fd(2, " before fndglob args[%i]=%s\n", (int)(*i), *(*args
+// 	// + *i));
+// 	expand = find_glob(*(*args + *i), quo);
+// 	// ft_printf_fd(2, "globexpander token=%s expand=%i\n", *(*args + *i),
+// 	// expand);
+// 	if (ft_strcmp("export", *(*args)) && expand)
+// 	{
+// 		exp = expand_glob(*(*args + *i), p);
+// 		// print_tab(exp);
+// 		if (!exp)
+// 		{
+// 			// ft_printf_fd(2, "globexpander glob 0 finds glob=%s\n",
+// 			// *(*args + *i));
+// 			remove_token_brackets(*(*args + *i));
+// 			return (*args);
+// 		}
+// 		*args = ft_array_replace(args, exp, *i);
+// 		*i = *i + ft_arr_len(exp) - 1;
+// 		free_array(&exp);
+// 	}
+// 	else
+// 		remove_token_brackets(*(*args + *i));
+// 	return (*args);
+// }
 
-int	exec_cmd_node(t_node *node, t_cmd_set *p)
-{
-	int		status;
-	int		quo[3];
-	int		i;
-	char	*last_arg;
+// int	exec_cmd_node(t_node *node, t_cmd_set *p)
+// {
+// 	int		status;
+// 	int		quo[3];
+// 	int		i;
+// 	char	*last_arg;
 
-	last_arg = NULL;
-	quo[0] = 0;
-	quo[1] = 0;
-	quo[2] = 0;
-	// ft_printf_fd(2, "execcmdnode cmdline=%s\n", node->cmd->line);
-	node->cmd->line = remove_dollar_quote(node->cmd->line);
-	node->cmd->line = var_expander(node->cmd->line, quo, p);
-	node->cmd->args = split_and_ignore_space_if_in_quote(node->cmd->line,
-			" \t");
-	// print_tab(node->cmd->args);
-	i = -1;
-	// ft_printf_fd(2, "execcmdnode after split\n");
-	while (node->cmd->args[++i])
-		node->cmd->args = glob_expander(&node->cmd->args, &i, quo, p);
-	if (ft_arr_len(node->cmd->args) == 0)
-		return (0);
-	last_arg = node->cmd->args[ft_arr_len(node->cmd->args) - 1];
-	if (last_arg)
-		ft_setenv("_", last_arg, p->envp);
-	// node->cmd->line = glob_expander(node->cmd->line, quo, p);
-	// remove_token_brackets(node->cmd->line);
-	// ft_printf_fd(2, "execcmdnode cmd->line=%s\n", node->cmd->line);
-	// ft_printf_fd(2, "execcmdnode after globexpander\n");
-	// print_tab(node->cmd->args);
-	// i = -1;
-	// while (node->cmd->args[++i])
-	// 	remove_token_brackets(node->cmd->args[i]);
-	// print_tab(node->cmd->args);
-	// ft_printf_fd(1, "IN EXEC_CMD+NODE node_in=%i node_out=%i\n",
-	// node->in_fd,
-	// node->out_fd);
-	// ft_printf_fd(1, "IN EXEC_CMD\n");
-	status = exec_node_par_builtins_b(node, node->cmd, p);
-	if (status)
-		status = p->status_code;
-	// ft_printf_fd(1, "	after execve\n");
-	if (!p->pipe_flag && !is_builtin(node->cmd))
-		status = wait_and_set_status(p);
-	return (status);
-}
+// 	last_arg = NULL;
+// 	quo[0] = 0;
+// 	quo[1] = 0;
+// 	quo[2] = 0;
+// 	// ft_printf_fd(2, "execcmdnode cmdline=%s\n", node->cmd->line);
+// 	node->cmd->line = remove_dollar_quote(node->cmd->line);
+// 	node->cmd->line = var_expander(node->cmd->line, quo, p);
+// 	node->cmd->args = split_and_ignore_space_if_in_quote(node->cmd->line,
+// 			" \t");
+// 	// print_tab(node->cmd->args);
+// 	i = -1;
+// 	// ft_printf_fd(2, "execcmdnode after split\n");
+// 	while (node->cmd->args[++i])
+// 		node->cmd->args = glob_expander(&node->cmd->args, &i, quo, p);
+// 	if (ft_arr_len(node->cmd->args) == 0)
+// 		return (0);
+// 	last_arg = node->cmd->args[ft_arr_len(node->cmd->args) - 1];
+// 	if (last_arg)
+// 		ft_setenv("_", last_arg, p->envp);
+// 	// node->cmd->line = glob_expander(node->cmd->line, quo, p);
+// 	// remove_token_brackets(node->cmd->line);
+// 	// ft_printf_fd(2, "execcmdnode cmd->line=%s\n", node->cmd->line);
+// 	// ft_printf_fd(2, "execcmdnode after globexpander\n");
+// 	// print_tab(node->cmd->args);
+// 	// i = -1;
+// 	// while (node->cmd->args[++i])
+// 	// 	remove_token_brackets(node->cmd->args[i]);
+// 	// print_tab(node->cmd->args);
+// 	// ft_printf_fd(1, "IN EXEC_CMD+NODE node_in=%i node_out=%i\n",
+// 	// node->in_fd,
+// 	// node->out_fd);
+// 	// ft_printf_fd(1, "IN EXEC_CMD\n");
+// 	status = exec_node_par_builtins_b(node, node->cmd, p);
+// 	if (status)
+// 		status = p->status_code;
+// 	// ft_printf_fd(1, "	after execve\n");
+// 	if (!p->pipe_flag && !is_builtin(node->cmd))
+// 		status = wait_and_set_status(p);
+// 	return (status);
+// }
 
 int	exec_pipe_node(t_node *node, t_cmd_set *p)
 {
@@ -1032,7 +1032,7 @@ void	init_subshell(t_cmd_set *p, t_node *node)
 	// free_all(shlvl, new_shlvl, NULL, NULL);
 	p->pipe_flag = 0;
 	i = -1;
-	while (++i < 1024) // void init_pid_arr(t_cmd_set *p)
+	while (++i < 4096) // void init_pid_arr(t_cmd_set *p)
 		p->pid_arr[i] = 0;
 	p->pid_index = 0;
 	p->shlvl++;

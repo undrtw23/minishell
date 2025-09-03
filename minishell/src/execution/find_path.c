@@ -6,7 +6,7 @@
 /*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:31:19 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/09/01 20:30:18 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/02 22:54:26 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ char	*find_command(char **env_path, char *cmd, char *cmd_path)
 	cmd_path = build_cmd_path(".", cmd);
 	if (cmd_path && access(cmd_path, X_OK) == 0)
 		return (cmd_path);
-	// ft_printf_fd(2, "find_command cmd_path=%s\n", cmd_path);
 	free_all(cmd_path, NULL, NULL, NULL);
 	return (NULL);
 }
@@ -84,11 +83,9 @@ static void	process_checks(t_node *node, char *path, t_cmd_set *p, char ***s)
 		return ;
 	}
 	if (!is_builtin(n) && n->args && !ft_strchr("/~", n->args[0][0]))
-		// took out"."
 	{
 		*s = ft_split(path, ':');
 		n->cmd_path = find_command(*s, *n->args, n->cmd_path);
-		// ft_printf_fd(2, "process checks n->cmdpath=%s\n", n->cmd_path);
 		if ((!n->cmd_path || !n->args[0]))
 			put_err("No_Cmd", n->args[0], 127, p);
 		else
@@ -114,7 +111,6 @@ static DIR	*cmd_checks(t_node *node, char ***s, char *path, t_cmd_set *p)
 	dir = NULL;
 	if (n && n->args)
 		dir = opendir(n->args[0]);
-	// ft_printf_fd(2, "cmdchecks dir=%p\n", dir);
 	if (n && n->args && ft_strchr(*n->args, '/') && !dir)
 	{
 		*s = ft_split(*n->args, '/');
@@ -142,14 +138,10 @@ void	find_cmd_path(t_cmd_set *p, t_node *node, char *path)
 	n = node->cmd;
 	path = ft_getenv("PATH", p->envp);
 	path = ensure_path(path);
-	// ft_printf_fd(2, "findcmdpath path=%s\n");
 	dir = cmd_checks(node, &s, path, p);
-	// ft_printf_fd(2, "findcmdpath dir=%p %s\n", dir, dir);
 	handle_exec_err(n, dir, p);
 	if (dir)
 		closedir(dir);
-	// if (cmd->next != NULL)
-	// 	p->status_code = 0;
 	if (node->cmd->args[0][0])
 	{
 		if (s)

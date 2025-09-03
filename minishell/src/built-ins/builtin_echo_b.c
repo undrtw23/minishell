@@ -6,7 +6,7 @@
 /*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 23:57:40 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/08/27 22:22:24 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/02 22:41:57 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ int	builtin_echo_b(t_cmd *cmd)
 
 	i = 0;
 	j = 0;
-	//print_tab(cmd->args);
 	print_newline = 1;
 	args = cmd->args;
 	while (args && args[++i])
