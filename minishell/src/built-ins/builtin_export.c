@@ -6,7 +6,7 @@
 /*   By: ngaurama <ngaurama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 03:07:51 by alsima            #+#    #+#             */
-/*   Updated: 2025/09/03 20:02:52 by ngaurama         ###   ########.fr       */
+/*   Updated: 2025/09/03 23:41:28 by ngaurama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	print_export(char **envp)
 	}
 }
 
-void	handle_append_operation(char *arg, t_cmd_set *p)
+int	handle_append_operation(char *arg, t_cmd_set *p)
 {
 	char	*equals;
 	char	*var_name;
@@ -74,17 +74,23 @@ void	handle_append_operation(char *arg, t_cmd_set *p)
 	equals = ft_strchr(arg, '=');
 	var_name = ft_substr(arg, 0, equals - arg - 1);
 	old_value = ft_getenv(var_name, p->envp);
+	if (old_value && (ft_strlen(old_value) + ft_strlen(equals + 1) > 4095))
+		return (handle_append_operation_helper(&var_name, &old_value, p), 1);
 	if (old_value)
 		new_value = ft_strjoin(old_value, equals + 1);
 	else
 		new_value = ft_strdup(equals + 1);
+	if (ft_strlen(new_value) > 4095)
+		return (handle_append_operation_helper(&var_name, &old_value, p),
+			free(new_value), 1);
 	p->envp = ft_setenv(var_name, new_value, p->envp);
 	free(var_name);
 	free(old_value);
 	free(new_value);
+	return (0);
 }
 
-void	process_export_arg(char *arg, t_cmd_set *p, int *status)
+int	process_export_arg(char *arg, t_cmd_set *p)
 {
 	char	*equals;
 	int		idx;
@@ -92,11 +98,14 @@ void	process_export_arg(char *arg, t_cmd_set *p, int *status)
 
 	equals = ft_strchr(arg, '=');
 	if (!is_valid_identifier(arg))
-		*status = 1;
+		return (1);
 	else if ((equals && equals > arg && *(equals - 1) == '+'))
-		handle_append_operation(arg, p);
+		return (handle_append_operation(arg, p));
 	else
 	{
+		if (equals && ft_strlen(equals + 1) > 4095)
+			return (put_err(NULL, "variable size exceeds minishell capacity",
+					1, p), 1);
 		pos = var_in_envp(arg, p->envp, &idx);
 		if (pos == 1)
 		{
@@ -105,6 +114,7 @@ void	process_export_arg(char *arg, t_cmd_set *p, int *status)
 		}
 		else if (pos == 0)
 			p->envp = ft_array_insert(p->envp, arg);
+		return (0);
 	}
 }
 
@@ -130,7 +140,7 @@ int	builtin_export_b(t_cmd_set *p, char **args)
 			has_flag_error = 1;
 			continue ;
 		}
-		process_export_arg(args[i], p, &status);
+		status = process_export_arg(args[i], p);
 	}
 	if (has_flag_error)
 		return (2);

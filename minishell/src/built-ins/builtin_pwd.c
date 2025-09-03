@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_pwd_b.c                                    :+:      :+:    :+:   */
+/*   builtin_pwd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ngaurama <ngaurama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 23:58:29 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/07/15 22:42:18 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/03 23:41:35 by ngaurama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,4 +23,12 @@ int	builtin_pwd_b(void)
 	ft_putendl_fd(buf, 1);
 	free(buf);
 	return (0);
+}
+
+void	handle_append_operation_helper(char **var_name, char **old_value,
+		t_cmd_set *p)
+{
+	put_err(NULL, "export: variable size exceeds minishell capacity", 1, p);
+	free(*var_name);
+	free(*old_value);
 }

@@ -6,7 +6,7 @@
 /*   By: ngaurama <ngaurama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:19:14 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/09/03 22:57:20 by ngaurama         ###   ########.fr       */
+/*   Updated: 2025/09/03 23:42:10 by ngaurama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -505,14 +505,15 @@ int								is_valid_identifier(char *str);
 // builtin_export.c
 void							sort_env(char **arr, int len);
 void							print_export(char **envp);
-void							handle_append_operation(char *arg,
+int								handle_append_operation(char *arg,
 									t_cmd_set *p);
-void							process_export_arg(char *arg, t_cmd_set *p,
-									int *status);
+int								process_export_arg(char *arg, t_cmd_set *p);
 int								builtin_export_b(t_cmd_set *p, char **args);
 
 // builtin_pwd.c
 int								builtin_pwd_b(void);
+void							handle_append_operation_helper(char **var_name,
+									char **old_value, t_cmd_set *p);
 
 // builtin_unset.c
 int								builtin_unset_b(t_cmd_set *p, char **args);
