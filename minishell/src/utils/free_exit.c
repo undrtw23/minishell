@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_exit.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ngaurama <ngaurama@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 19:23:28 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/09/03 22:29:33 by ngaurama         ###   ########.fr       */
+/*   Updated: 2025/09/04 01:00:19 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,6 @@ void	free_exit(t_cmd_set *p, int exit_code, char *msg)
 	if (p && p->nodes)
 		free_node(p->nodes);
 	rl_clear_history();
+	close_fds_except_std();
 	exit(exit_code);
 }

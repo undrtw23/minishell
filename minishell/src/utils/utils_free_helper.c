@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_free_helper.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ngaurama <ngaurama@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 22:37:12 by ngaurama          #+#    #+#             */
-/*   Updated: 2025/09/03 22:37:33 by ngaurama         ###   ########.fr       */
+/*   Updated: 2025/09/04 01:10:32 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,10 @@ void	close_fds_except_std(void)
 	int	i;
 
 	i = 3;
-	while (i < 4096)
+	while (i < 1024)
 	{
-		close(i);
+		if (i != -1)
+			close(i);
 		i++;
 	}
 }

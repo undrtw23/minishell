@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ngaurama <ngaurama@student.42.fr>          +#+  +:+       +#+         #
+#    By: alsima <alsima@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/22 18:50:02 by gkorzecz          #+#    #+#              #
-#    Updated: 2025/09/03 22:43:34 by ngaurama         ###   ########.fr        #
+#    Updated: 2025/09/04 01:01:40 by alsima           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,37 +40,6 @@ BI				=	src/built-ins/
 SGE				=	src/signals_and_errors/
 UTI				=	src/utils/
 
-# SRC_FILES	=     $(PARS)heredoc.c $(PARS)heredoc_helper.c $(PARS)parse_node_types.c $(PARS)parse_node_utils.c \
-# 					$(PARS)parse_node_find_op.c $(PARS)parse_node_checks.c $(PARS)parse_node_handlers.c \
-# 					$(PARS)parse_nodes_main.c \
-# 					$(PARS)process_input_quote_utils.c $(PARS)process_input_token_count.c \
-# 					$(PARS)process_input_token_count2.c $(PARS)process_input_token_fill.c \
-# 					$(PARS)process_input_token_rearrange.c $(PARS)process_input_token_rearrange2.c \
-# 					$(PARS)process_input_token_split.c $(PARS)process_input_syntax_check.c \
-# 					$(PARS)process_input_main.c $(PARS)process_input_main2.c \
-# 					$(PARS)process_input_condition_check.c $(PARS)process_input_handle_helper.c \
-# 					$(PARS)process_input_helper.c $(PARS)process_input_helper2.c \
-# 					$(PARS)parse_split_cmd.c $(PARS)split_with_space.c \
-# 					$(PARS)syntax_checker.c $(PARS)trim_quotes.c $(PARS)expand.c \
-# 					$(PARS)expand_helper.c $(PARS)expand_helper_2.c $(PARS)create_fds.c \
-# 					$(BI)builtin_export.c $(BI)builtin_export_helper.c \
-# 					$(BI)builtin_cd.c $(BI)builtin_cd_helper.c  $(BI)builtin_checker.c $(BI)builtin_echo.c\
-# 					$(BI)builtin_env.c  $(BI)builtin_exit.c\
-# 					$(BI)builtin_pwd.c  $(BI)builtin_unset.c\
-# 					$(BI)environement.c\
-# 					$(EXEC)execute.c $(EXEC)find_path.c \
-# 					$(EXEC)find_path_helper.c \
-# 					$(EXEC)execute_fd_utils.c $(EXEC)execute_fork_utils.c $(EXEC)execute_builtins.c \
-# 					$(EXEC)execute_pipe_utils.c $(EXEC)execute_pipe.c $(EXEC)execute_redirect_utils.c \
-# 					$(EXEC)execute_read.c $(EXEC)execute_write.c $(EXEC)execute_readwrite.c \
-# 					$(EXEC)execute_herestr.c $(EXEC)execute_quote_utils.c $(EXEC)execute_redirect.c \
-# 					$(EXEC)execute_subshell.c $(EXEC)glob.c $(EXEC)glob_utils.c $(EXEC)glob_matching.c\
-# 					$(EXEC)glob_matching2.c \
-# 					$(SGE)handle_errors.c $(SGE)handle_errors_helper.c $(SGE)handle_signals.c\
-# 					$(UTI)free_exit.c $(UTI)utils.c $(UTI)utils_array.c\
-# 					$(UTI)utils_free.c \
-# 					$(SRC_DIR_F)/init.c $(SRC_DIR_F)/init2.c $(SRC_DIR_F)/main.c
-
 SRC_FILES	=     $(PARS)heredoc.c $(PARS)heredoc_helper.c $(PARS)parse_node_types.c $(PARS)parse_node_utils.c \
 					$(PARS)parse_node_find_op.c $(PARS)parse_node_checks.c $(PARS)parse_node_handlers.c \
 					$(PARS)parse_nodes.c \
@@ -103,13 +72,9 @@ SRC_FILES	=     $(PARS)heredoc.c $(PARS)heredoc_helper.c $(PARS)parse_node_types
 					
 OBJ_FILES = $(SRC_FILES:$(SRC_DIR_F)/%.c=$(OBJ_DIR)/%.o)
 
-######
-#SRC_FILES	= $(wildcard $(SRC_DIR_F)/*.c)
-#OBJ_FILES	= $(patsubst $(SRC_DIR_F)/%.c, $(OBJ_DIR)/%.o, $(SRC_FILES))
-
 NAME		= minishell
 CC			= cc
-FLAGS		= -g -Wall -Werror -Wextra -ggdb -fsanitize=address,undefined
+FLAGS		= -Wall -Werror -Wextra
 RM			= rm -rf
 AR			= ar rcs
 INCLUDE		= 	-I ./inc/\
