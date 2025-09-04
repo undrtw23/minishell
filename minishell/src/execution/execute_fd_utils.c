@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_fd_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ngaurama <ngaurama@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 20:39:26 by ngaurama          #+#    #+#             */
-/*   Updated: 2025/09/03 20:40:50 by ngaurama         ###   ########.fr       */
+/*   Updated: 2025/09/04 22:05:24 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,20 @@ void	dup2_and_close(int in_fd, int out_fd)
 		dup2(out_fd, 1);
 		close(out_fd);
 	}
-	close_fds_except_std();
 }
 
-void	restore_std_fds(int orig_in, int orig_out)
+void	restore_std_fds(t_node *node, int orig_in, int orig_out)
 {
-	if (orig_in != 0)
+	if (node->in_fd != 0)
+	{
 		dup2(orig_in, 0);
-	if (orig_out != 1)
+		close(orig_in);
+	}
+	if (node->out_fd != 1)
+	{
 		dup2(orig_out, 1);
-	close(orig_in);
-	close(orig_out);
+		close(orig_out);
+	}
 }
 
 void	handle_redirections(t_node *node)

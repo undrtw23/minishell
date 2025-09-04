@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: alsima <alsima@student.42.fr>              +#+  +:+       +#+         #
+#    By: ngaurama <ngaurama@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/22 18:50:02 by gkorzecz          #+#    #+#              #
-#    Updated: 2025/09/04 01:01:40 by alsima           ###   ########.fr        #
+#    Updated: 2025/09/03 23:46:28 by ngaurama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,6 +71,7 @@ SRC_FILES	=     $(PARS)heredoc.c $(PARS)heredoc_helper.c $(PARS)parse_node_types
 					$(SRC_DIR_F)/init.c $(SRC_DIR_F)/init2.c $(SRC_DIR_F)/main.c
 					
 OBJ_FILES = $(SRC_FILES:$(SRC_DIR_F)/%.c=$(OBJ_DIR)/%.o)
+
 
 NAME		= minishell
 CC			= cc

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ngaurama <ngaurama@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:19:14 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/09/03 23:42:10 by ngaurama         ###   ########.fr       */
+/*   Updated: 2025/09/04 22:44:56 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -534,7 +534,8 @@ void							handle_env_vars(char *str, int *i, int fd[2],
 
 // execute_fd_utils.c
 void							dup2_and_close(int in_fd, int out_fd);
-void							restore_std_fds(int orig_in, int orig_out);
+void							restore_std_fds(t_node *node, int orig_in,
+									int orig_out);
 void							handle_redirections(t_node *node);
 void							setup_left_node_fds(t_node *node, int fd);
 void							setup_left_node_output_fds(t_node *node,
@@ -548,8 +549,8 @@ int								fork_and_exec(t_node *node, t_cmd *cmd,
 int								exec_node_par_builtins_b_helper_one(pid_t pid,
 									t_cmd_set *p);
 int								exec_node_par_builtins_b_helper_two(
-									t_node *node,
-									t_cmd *cmd, t_cmd_set *p, pid_t pid);
+									t_node *node, t_cmd *cmd,
+									t_cmd_set *p, pid_t pid);
 int								exec_node_par_builtins_b(t_node *node,
 									t_cmd *cmd, t_cmd_set *p);
 

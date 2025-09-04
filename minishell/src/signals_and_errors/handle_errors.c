@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_errors.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ngaurama <ngaurama@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:32:55 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/09/03 22:56:29 by ngaurama         ###   ########.fr       */
+/*   Updated: 2025/09/04 22:40:04 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ void	*put_err(char *err_msg, char *cmd, int err_code, t_cmd_set *p)
 			ft_printf_fd(2, "mini: %s: No such file or directory\n", cmd);
 		else if (!ft_strncmp(err_msg, "Perm_Denied", 11))
 			ft_printf_fd(2, "mini: %s: Permission denied\n", cmd);
-		put_err_helper(err_msg, cmd, p);
+		else
+			put_err_helper(err_msg, cmd, p);
 	}
 	else if (cmd && cmd[0] != '\0')
 		ft_printf_fd(2, "mini: %s\n", cmd);
