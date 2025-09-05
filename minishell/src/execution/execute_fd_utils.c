@@ -6,7 +6,7 @@
 /*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 20:39:26 by ngaurama          #+#    #+#             */
-/*   Updated: 2025/09/04 22:05:24 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/05 18:57:25 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,11 @@ void	dup2_and_close(int in_fd, int out_fd)
 void	restore_std_fds(t_node *node, int orig_in, int orig_out)
 {
 	if (node->in_fd != 0)
-	{
 		dup2(orig_in, 0);
-		close(orig_in);
-	}
 	if (node->out_fd != 1)
-	{
 		dup2(orig_out, 1);
-		close(orig_out);
-	}
+	close(orig_in);
+	close(orig_out);
 }
 
 void	handle_redirections(t_node *node)
