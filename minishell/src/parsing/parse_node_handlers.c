@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_node_handlers.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ngaurama <ngaurama@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 21:42:44 by ngaurama          #+#    #+#             */
-/*   Updated: 2025/09/03 21:47:31 by ngaurama         ###   ########.fr       */
+/*   Updated: 2025/09/06 16:33:23 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,22 +70,23 @@ t_node	*handle_binary_node(char **args, int i, t_cmd_set *p, int index_base)
 	if (!nodehead)
 		return (NULL);
 	nodehead->type = get_nodetype(args[i]);
+	if (nodehead->type == N_PIPE)
+	{
+		p->pipe_count++;
+		if (p->pipe_count > 512)
+			return (put_err(NULL, "pipe limit exceeded", 1, p), free(nodehead),
+				NULL);
+	}
 	nodehead->op_token_index = i + index_base;
 	nodehead->left_node = create_node(trim_array(args, 0, i - 1), p,
 			index_base);
 	if (!nodehead->left_node)
-	{
-		free_node(nodehead);
-		return (NULL);
-	}
+		return (free_node(nodehead), NULL);
 	nodehead->left_node->parent_node = nodehead;
 	nodehead->right_node = create_node(trim_array(args, i + 1, ft_arr_len(args)
 				- 1), p, i + 1 + index_base);
 	if (!nodehead->right_node)
-	{
-		free_node(nodehead);
-		return (NULL);
-	}
+		return (free_node(nodehead), NULL);
 	nodehead->right_node->parent_node = nodehead;
 	return (nodehead);
 }

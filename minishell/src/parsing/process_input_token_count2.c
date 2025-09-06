@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_input_token_count2.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ngaurama <ngaurama@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 22:03:37 by ngaurama          #+#    #+#             */
-/*   Updated: 2025/09/03 22:06:19 by ngaurama         ###   ########.fr       */
+/*   Updated: 2025/09/06 16:32:25 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,7 @@ void	handle_operator_token(char **input, char ***a, int *i)
 		(*a)[*i] = malloc_and_copy((*input)++, 1);
 	}
 	else
-	{
 		(*a)[*i] = malloc_and_copy(*input, 1);
-	}
 	*input += ft_strlen((*a)[*i]);
 	(*i)++;
 }

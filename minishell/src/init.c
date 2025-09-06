@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ngaurama <ngaurama@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 16:08:28 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/09/03 22:48:17 by ngaurama         ###   ########.fr       */
+/*   Updated: 2025/09/06 15:50:27 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void	init_p_struct(t_cmd_set *p)
 	p->status_code = 0;
 	p->pid_of_lst_cmd = 0;
 	p->pipe_flag = 0;
+	p->pipe_count = 0;
 	p->pid_index = 0;
 	p->tmp_dir = NULL;
 	p->filename = NULL;

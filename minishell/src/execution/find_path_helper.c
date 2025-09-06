@@ -6,7 +6,7 @@
 /*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 12:17:58 by cwang             #+#    #+#             */
-/*   Updated: 2025/09/02 22:53:49 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/06 17:11:32 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	handle_exec_err(t_cmd *n, DIR *dir, t_cmd_set *p)
 		slash = ft_strchr("/~", n->args[0][0]) != NULL;
 	if (n->args && n->args[0][0] && n->args[0][0] == '.'
 		&& ft_strlen(n->args[0]) == 1)
-		put_err(".", ".", 2, p);
+		put_err(".", ".", 0, p);
 	else if (n->args && n->args[0][0] && slash && dir)
 		put_err("Is_Directory", *n->args, 126, p);
 	else if (n->cmd_path && access(n->cmd_path, F_OK) == -1)

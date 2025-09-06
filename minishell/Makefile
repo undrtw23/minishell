@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ngaurama <ngaurama@student.42.fr>          +#+  +:+       +#+         #
+#    By: alsima <alsima@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/22 18:50:02 by gkorzecz          #+#    #+#              #
-#    Updated: 2025/09/03 23:46:28 by ngaurama         ###   ########.fr        #
+#    Updated: 2025/09/06 16:40:25 by alsima           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -112,7 +112,7 @@ $(GET_NEXT_LINE):
 
 $(NAME): $(OBJ_FILES)
 	@echo "$(YELLOW)Compiling minishell...$(RESET)"
-	@$(CC) $(FLAGS) -o $(NAME) $(OBJ_FILES) $(LIBFT) $(FT_PRINTF_FD) $(GET_NEXT_LINE) -lreadline $(INCLUDE)
+	@$(CC) $(FLAGS) -o $(NAME) $(OBJ_FILES) $(LIBFT) $(FT_PRINTF_FD) -lreadline $(GET_NEXT_LINE) $(INCLUDE)
 	@echo "$(GREEN)Minishell ready!$(RESET)"
 
 clean:

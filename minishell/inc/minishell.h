@@ -6,7 +6,7 @@
 /*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:19:14 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/09/04 22:44:56 by alsima           ###   ########.fr       */
+/*   Updated: 2025/09/06 17:30:54 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ typedef struct s_cmd_set
 	int							status_code;
 	pid_t						pid_of_lst_cmd;
 	int							pipe_flag;
+	int							pipe_count;
 	pid_t						pid_arr[4096];
 	int							pid_index;
 	char						*tmp_dir;
@@ -194,7 +195,6 @@ void							*put_err_syntax(char *err_msg, int err_code,
 									t_cmd_set *p);
 
 // handle_signals.c
-extern volatile sig_atomic_t	g_exit_status;
 void							set_signals(t_cmd_set *p);
 void							signals_parent(int signal_code);
 void							signals_child(int signal_code);
@@ -427,7 +427,8 @@ int								size_to_malloc(char *s, char *set, int count);
 char							**add_to_array(char **tmpstr, char *s,
 									char *set, int i[3]);
 char							**ft_split_with_pipe_or_redir_char(
-									char const *s, char *set);
+									char const *s,
+									char *set);
 char							**split_with_special_chars(char **args);
 
 // process_input_helper.c
@@ -549,8 +550,8 @@ int								fork_and_exec(t_node *node, t_cmd *cmd,
 int								exec_node_par_builtins_b_helper_one(pid_t pid,
 									t_cmd_set *p);
 int								exec_node_par_builtins_b_helper_two(
-									t_node *node, t_cmd *cmd,
-									t_cmd_set *p, pid_t pid);
+									t_node *node,
+									t_cmd *cmd, t_cmd_set *p, pid_t pid);
 int								exec_node_par_builtins_b(t_node *node,
 									t_cmd *cmd, t_cmd_set *p);
 

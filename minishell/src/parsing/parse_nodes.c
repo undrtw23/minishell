@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_nodes.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ngaurama <ngaurama@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alsima <alsima@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:37:49 by gkorzecz          #+#    #+#             */
-/*   Updated: 2025/09/03 22:56:00 by ngaurama         ###   ########.fr       */
+/*   Updated: 2025/09/06 17:21:32 by alsima           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,11 @@ void	*parse_nodes(char **args, t_cmd_set *p)
 	dup_args = ft_dup_array(args);
 	p->nodes = create_node(dup_args, p, 0);
 	if (p->nodes == NULL)
+	{
+		rl_clear_history();
 		return (p);
+	}
+	p->pipe_count = 0;
 	status = exec_node(p->nodes, p);
 	free_node(p->nodes);
 	p->nodes = NULL;
